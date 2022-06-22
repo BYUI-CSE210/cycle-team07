@@ -33,6 +33,12 @@ class DrawActorsAction(Action):
             segments = snake.get_segments()
             self._video_service.draw_actors(segments)
         
+        snakes = cast.get_actors("snakes2")
+        self._video_service.clear_buffer()
+        for snake in snakes:
+            segments = snake.get_segments()
+            self._video_service.draw_actors(segments)
+            
         messages = cast.get_actors("messages")
         self._video_service.draw_actors(messages, True)
         self._video_service.flush_buffer()
