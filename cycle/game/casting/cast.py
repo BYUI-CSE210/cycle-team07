@@ -59,17 +59,17 @@ class Cast:
         Returns:
             List: The first actor in the group.
         """
-        result = None
+        result = []
         if group in self._actors.keys():
             result = self._actors[group][0]
         return result
 
-    def remove_actor(self, group, actor):
-        """Removes an actor from the given group.
+    # def remove_actor(self, group, actor):
+    #     """Removes an actor from the given group.
         
-        Args:
-            group (string): The name of the group.
-            actor (Actor): The actor to remove.
-        """
-        if group in self._actors:
-            self._actors[group].remove(actor)
+    #     Args:
+    #         group (string): The name of the group.
+    #         actor (Actor): The actor to remove.
+    #     """
+    #     if group in self._actors:
+    #         self._actors[group].remove(actor)
