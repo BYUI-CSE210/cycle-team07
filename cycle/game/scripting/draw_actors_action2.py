@@ -1,7 +1,7 @@
 from game.scripting.action import Action
 
 
-class DrawActorsAction(Action):
+class DrawActorsAction2(Action):
     """
     An output action that draws all the actors.
     
@@ -26,8 +26,7 @@ class DrawActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
-
-        snakes = cast.get_actors("snakes")
+        snakes = cast.get_actors("snakes2")
         self._video_service.clear_buffer()
         for snake in snakes:
             segments = snake.get_segments()
@@ -37,7 +36,7 @@ class DrawActorsAction(Action):
         self._video_service.draw_actors(messages, True)
         self._video_service.flush_buffer()
         # score = cast.get_first_actor("scores")
-        # snake = cast.get_first_actor("snakes")
+        # snake = cast.get_first_actor("snakes2")
         # segments = snake.get_segments()
         # messages = cast.get_actors("messages")
 
