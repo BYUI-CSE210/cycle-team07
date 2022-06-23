@@ -12,12 +12,17 @@ class Snake(Actor):
     Attributes:
         _points (int): The number of points.
     """
-    def __init__(self):
+    def __init__(self, position = 1):
         super().__init__()
         self._segments = []
+
+        self.position = position
+        self.color = constants.GREEN
+
         self._prepare_body()
 
     def get_segments(self):
+
         return self._segments
 
     def move_next(self):
@@ -32,9 +37,10 @@ class Snake(Actor):
             trailing.set_velocity(velocity)
 
     def get_head(self):
+
         return self._segments[0]
 
-    def grow_tail(self, number_of_segments):
+    def leave_trail(self, number_of_segments):
         for i in range(number_of_segments):
             tail = self._segments[-1]
             velocity = tail.get_velocity()
@@ -45,21 +51,31 @@ class Snake(Actor):
             segment.set_position(position)
             segment.set_velocity(velocity)
             segment.set_text("#")
-            segment.set_color(constants.GREEN)
+            segment.set_color(self.color)
             self._segments.append(segment)
 
     def turn_head(self, velocity):
+
         self._segments[0].set_velocity(velocity)
     
+
+
     def _prepare_body(self):
-        x = int(constants.MAX_X / 2)
-        y = int(constants.MAX_Y / 2)
+
+        if self.position == 1:
+            x = int((constants.MAX_X * constants.CELL_SIZE) / 4)
+            color = self.color
+        else:
+            x = int((constants.MAX_X * constants.CELL_SIZE) - ((constants.MAX_X * constants.CELL_SIZE)/ 4))
+            self.color = constants.BLUE
+            color = self.color
+
+        y = int(constants.MAX_Y / 3)
 
         for i in range(constants.SNAKE_LENGTH):
-            position = Point(x - i * constants.CELL_SIZE, y)
-            velocity = Point(1 * constants.CELL_SIZE, 0)
+            position = Point(x , y + i * constants.CELL_SIZE)
+            velocity = Point(0, -constants.CELL_SIZE)
             text = "8" if i == 0 else "#"
-            color = constants.GREEN if i == 0 else constants.GREEN
             
             segment = Actor()
             segment.set_position(position)
@@ -67,3 +83,7 @@ class Snake(Actor):
             segment.set_text(text)
             segment.set_color(color)
             self._segments.append(segment)
+
+    def set_color(self,color):
+
+        self.color = color
