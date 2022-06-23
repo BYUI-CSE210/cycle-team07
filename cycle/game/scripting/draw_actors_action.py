@@ -1,3 +1,4 @@
+"""Global Imports"""
 import constants
 from game.scripting.action import Action
 from game.shared.point import Point
@@ -28,39 +29,26 @@ class DrawActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
-        snakes = cast.get_actors("snakes")
+        cycles = cast.get_actors("cycles")
         scores = cast.get_actors("scores")
         messages = cast.get_actors("messages")
         scores[1].set_position(Point(constants.MAX_X - (constants.CELL_SIZE * 15), 0))
 
         self._video_service.clear_buffer()
-        for snake in snakes:
-            snake_segments = snake.get_segments()
-            self._video_service.draw_actor(snake)
-            self._video_service.draw_actors(snake_segments)
+        for cycle in cycles:
+            cycle_segments = cycle.get_segments()
+            self._video_service.draw_actor(cycle)
+            self._video_service.draw_actors(cycle_segments)
         for score in scores:
             self._video_service.draw_actor(score)
         self._video_service.draw_actors(messages, True)
 
-
         self._video_service.flush_buffer()
 
-        snakes = cast.get_actors("snakes2")
+        cycles = cast.get_actors("cycles2")
         self._video_service.clear_buffer()
-        for snake in snakes:
-            segments = snake.get_segments()
+        for cycle in cycles:
+            segments = cycle.get_segments()
             self._video_service.draw_actors(segments)
             
         messages = cast.get_actors("messages")
-        #self._video_service.draw_actors(messages, True)
-        # self._video_service.flush_buffer()
-        # score = cast.get_first_actor("scores")
-        # snake = cast.get_first_actor("snakes")
-        # segments = snake.get_segments()
-        # messages = cast.get_actors("messages")
-
-        # self._video_service.clear_buffer()
-        # self._video_service.draw_actors(segments)
-        # self._video_service.draw_actor(score)
-        # self._video_service.draw_actors(messages, True)
-        # self._video_service.flush_buffer()

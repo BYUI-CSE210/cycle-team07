@@ -1,7 +1,7 @@
+"""Global Imports"""
 import constants
 from game.shared.color import Color
 from game.shared.point import Point
-
 
 class Actor:
     """A visible, moveable thing that participates in the game. 

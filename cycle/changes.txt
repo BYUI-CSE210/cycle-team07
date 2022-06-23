@@ -1,0 +1,26 @@
+ATTENION: Several changes were applicable generally across multiple files so I lumped them into "General Changes"
+
+General Changes:
+    1. Added the comment """Global Imports""" at the top of every file that has global imports
+    2. Fixed many of the class and method comments across several files
+    3. Deleted unnecessary empty lines and fixed various grammar errors across several files
+    4. Changed every occurrence of the word "Snake" to "Cycle" across every applicable file to reflect the correct game title
+
+Specific Changes:
+    __main__.py:
+        1. deleted the unnecessary imports for Color and Point
+
+    cycle.py:
+        1. fixed the class and method comments
+        2. fixed the "leave_trail" method to slowly lengthen the trail at a 1:5 (increment:loop) ratio. The previous method would lengthen by (1) w/ every loop but mine slows it down which I found to be a better balance
+
+    handle_collisions_action.py:
+        1. Added code to check when a cycle runs into its own trail(lines 68-86)
+        2. Added code to save a message declaring the winner & the cause of the Game Over
+        3. Added code to display the winner & display the Game Over cause
+    
+    Deleted the following unnecessary extra files:
+        1. snake2.py
+        2. control_actors2.py
+        3. draw_actors_action2.py
+        4. handle_collissions2.py
