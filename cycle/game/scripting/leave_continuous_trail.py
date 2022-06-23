@@ -1,8 +1,9 @@
+"""Global Imports"""
 from game.scripting.action import Action
 
 class LeaveTrail(Action):
     """
-    An update action that leaves a trail coming from the growing snake.
+    An update action that leaves a growing trail coming from the cycle.
     
     The responsibility of Make trail action is to increase the trial of the players
     """
@@ -14,6 +15,6 @@ class LeaveTrail(Action):
             script (Script): The script of Actions in the game.
             
         """
-        snakes = cast.get_actors("snakes")
-        for snake in snakes:
-            snake.leave_trail(1)
+        cycles = cast.get_actors("cycles")
+        for cycle in cycles:
+            cycle.leave_trail(1)

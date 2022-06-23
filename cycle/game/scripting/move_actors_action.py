@@ -1,5 +1,5 @@
+"""Global Imports"""
 from game.scripting.action import Action
-
 
 class MoveActorsAction(Action):
     """

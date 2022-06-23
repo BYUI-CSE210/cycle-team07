@@ -1,16 +1,15 @@
+"""Global Imports"""
 import constants
 from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
 
-from operator import concat
-
 class HandleCollisionsAction(Action):
     """
     An update action that handles interactions between the actors.
 
-    The responsibility of HandleCollisionsAction is to handle the situation when the snake collides
-    with the other player, or the snake collides with its segments, or the game is over.
+    The responsibility of HandleCollisionsAction is to handle the situation when the cycle collides
+    with the other player, or the cycle collides with its segments, or the game is over.
 
     Attributes:
         _is_game_over (boolean): Whether or not the game is over.
@@ -31,62 +30,91 @@ class HandleCollisionsAction(Action):
             self._handle_segment_collision(cast)
             self._handle_game_over(cast)
 
-
     def _handle_segment_collision(self, cast):
-        """Sets the game over flag if the snake collides with one of its segments.
+        """Sets the game over flag if the cycle collides with one of its segments.
         
         Args:
             cast (Cast): The cast of Actors in the game.
         """
         scores = cast.get_actors("scores")
-        snakes = cast.get_actors("snakes")
+        cycles = cast.get_actors("cycles")
 
-        snake_1 = snakes[0].get_head()
-        snake_2 = snakes[1].get_head()
+        cycle_1 = cycles[0].get_head()
+        cycle_2 = cycles[1].get_head()
 
-        snake_1_segments = snakes[0].get_segments()
-        snake_2_segments = snakes[1].get_segments()
+        cycle_1_segments = cycles[0].get_segments()
+        cycle_2_segments = cycles[1].get_segments()
 
-        
-        for segment in snake_1_segments:
-            if snake_2.get_position().equals(segment.get_position()):
+        # Blue is cycle_2 (WASD). This for loop checks if player # 2(Blue) runs into player # 1(Green)'s trail
+        for segment in cycle_1_segments:
+            if cycle_2.get_position().equals(segment.get_position()):
                 self._is_game_over = True
                 scores[1].add_points(1)
-                
+                fail_reason = "Blue hit Green's trail!"
+                winner = "Green"
+                result = {"A": fail_reason, "B": winner}
+                return result
 
-        for segment in snake_2_segments:
-            if snake_1.get_position().equals(segment.get_position()):
+        # Green is cycle_1 (IJKL). This checks if player # 1(Green) runs into player # 2(Blue)'s trail
+        for segment in cycle_2_segments:
+            if cycle_1.get_position().equals(segment.get_position()):
                 self._is_game_over = True
                 scores[0].add_points(1)
-                
+                fail_reason = "Green hit Blue's trail!"
+                winner = "Blue"
+                result = {"A": fail_reason, "B": winner}
+                return result
 
+        # checks if green hit its own trail
+        for segment in cycle_1_segments[1:]:
+            if cycle_1.get_position().equals(segment.get_position()):
+                self._is_game_over = True
+                scores[0].add_points(1)
+                fail_reason = "Green hit its own trail!"
+                winner = "Blue"
+                result = {"A": fail_reason, "B": winner}
+                return result
 
+        # checks if Blue hit its own trail
+        for segment in cycle_2_segments[1:]:
+            if cycle_2.get_position().equals(segment.get_position()):
+                self._is_game_over = True
+                scores[0].add_points(1)
+                fail_reason = "Blue hit its own trail!"
+                winner = "Green"
+                result = {"A": fail_reason, "B": winner}
+                return result
 
     def _handle_game_over(self, cast):
-        """Shows the 'game over' message and turns the snake white if the game is over.
+        """Shows the 'game over' message and turns the cycle white if the game is over.
         
         Args:
             cast (Cast): The cast of Actors in the game.
         """
         if self._is_game_over:
-            snakes = cast.get_actors("snakes")
-            snake_1_segments = snakes[0].get_segments()
-            snake_2_segments = snakes[1].get_segments()
-            segments = concat(snake_1_segments, snake_2_segments)
+            cycles = cast.get_actors("cycles")
+            cycle_1_segments = cycles[0].get_segments()
+            cycle_2_segments = cycles[1].get_segments()
+            segments = cycle_1_segments + cycle_2_segments
 
             x = int(constants.MAX_X / 2)
             y = int(constants.MAX_Y / 2)
-            position = Point(x, y)
+            winner_position = Point(x, y)
+            fail_reason_position = Point(x, (y+20))
 
             for segment in segments:
                 segment.set_color(constants.WHITE)
-            for snake in snakes:
-                snake.set_color(constants.WHITE)
-
-            message = Actor()
-            message.set_text("Game Over!")
-            message.set_position(position)
-            cast.add_actor("messages", message)
-
-
+            for cycle in cycles:
+                cycle.set_color(constants.WHITE)
             
+            result = self._handle_segment_collision(cast)
+            fail_reason = result["A"]
+            winner = result["B"]
+            fail_reason_message = Actor()
+            winner_message = Actor()
+            fail_reason_message.set_text(fail_reason)
+            fail_reason_message.set_position(fail_reason_position)
+            winner_message.set_text(f"Game Over! {winner} is the winner!")
+            winner_message.set_position(winner_position)
+            cast.add_actor("messages", winner_message)
+            cast.add_actor("messages", fail_reason_message)

@@ -1,6 +1,5 @@
+"""Global Imports"""
 import pyray
-from game.shared.point import Point
-
 
 class KeyboardService:
     """Detects player input. 

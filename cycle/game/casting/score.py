@@ -1,5 +1,5 @@
+"""Global Imports"""
 from game.casting.actor import Actor
-
 
 class Score(Actor):
     """
